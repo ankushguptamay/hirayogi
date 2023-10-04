@@ -18,7 +18,7 @@ const uploadImage = require('../Middleware/uploadFile/uploadImage');
 
 appUser.post("/register", register);
 appUser.post("/login", loginAppUser);
-appUser.post("/verifyLoginOtp", verifyLoginOtp);
+// appUser.post("/verifyLoginOtp", verifyLoginOtp);
 appUser.get("/getAppUser", jwt.verifyAppUserJWT, isAppUserPresent, getAppUserForAppUser);
 appUser.post("/addOrUpdateProfileImage", jwt.verifyAppUserJWT, isAppUserPresent, uploadImage.single('profileImage'), addOrUpdateProfileImage);
 appUser.delete("/removeProfileImage", jwt.verifyAppUserJWT, isAppUserPresent, removeProfileImage);

@@ -8,7 +8,7 @@ const jwt = require('../Middleware/verifyJWTToken');
 const { isUserPresentAll } = require('../Middleware/isPresent');
 
 leadManagement.post("/login", login);
-leadManagement.post("/verifyLoginOtp", verifyLoginOtp);
+// leadManagement.post("/verifyLoginOtp", verifyLoginOtp);
 leadManagement.get("/userInformation", jwt.verifyJWT, isUserPresentAll, userInformation);
 
 leadManagement.post("/createLead", jwt.verifyJWT, isUserPresentAll, createLead);

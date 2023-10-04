@@ -213,65 +213,65 @@ exports.loginAppUser = async (req, res) => {
     }
 }
 
-exports.verifyLoginOtp = async (req, res) => {
-    try {
-        // Validate body
-        const { error } = appUserLoginOTP(req.body);
-        if (error) {
-            // console.log(error);
-            return res.status(400).send(error.details[0].message);
-        }
-        const { phoneNumber, phoneOTP } = req.body;
-        const countryCode = "+91";
-        // Checking is mobile number present or not
-        const appUser = await AppUser.findOne({
-            where: {
-                phoneNumber: phoneNumber
-            }
-        });
-        if (!appUser) {
-            return res.status(400).send({
-                success: false,
-                message: "User not found! First register your self!"
-            });
-        }
-        // verify OTP
-        const respond = await twilio.verify.v2
-            .services(TWILIO_SERVICE_SID)
-            .verificationChecks
-            .create({
-                to: `${countryCode}${phoneNumber}`,
-                code: phoneOTP
-            });
-        if (respond.valid === true) {
-            // generating auth Token
-            const data = {
-                id: appUser.id,
-                email: appUser.email
-            }
-            const authToken = jwt.sign(
-                data,
-                JWT_SECRET_KEY,
-                { expiresIn: JWT_VALIDITY } // five day
-            );
-            res.status(200).send({
-                success: true,
-                message: `OTP verified successfully!`,
-                authToken: authToken
-            });
-        } else {
-            res.status(400).send({
-                success: false,
-                message: 'Wrong OTP!'
-            })
-        }
-    } catch (err) {
-        res.status(500).send({
-            success: false,
-            message: err.message
-        });
-    }
-}
+// exports.verifyLoginOtp = async (req, res) => {
+//     try {
+//         // Validate body
+//         const { error } = appUserLoginOTP(req.body);
+//         if (error) {
+//             // console.log(error);
+//             return res.status(400).send(error.details[0].message);
+//         }
+//         const { phoneNumber, phoneOTP } = req.body;
+//         const countryCode = "+91";
+//         // Checking is mobile number present or not
+//         const appUser = await AppUser.findOne({
+//             where: {
+//                 phoneNumber: phoneNumber
+//             }
+//         });
+//         if (!appUser) {
+//             return res.status(400).send({
+//                 success: false,
+//                 message: "User not found! First register your self!"
+//             });
+//         }
+//         // verify OTP
+//         const respond = await twilio.verify.v2
+//             .services(TWILIO_SERVICE_SID)
+//             .verificationChecks
+//             .create({
+//                 to: `${countryCode}${phoneNumber}`,
+//                 code: phoneOTP
+//             });
+//         if (respond.valid === true) {
+//             // generating auth Token
+//             const data = {
+//                 id: appUser.id,
+//                 email: appUser.email
+//             }
+//             const authToken = jwt.sign(
+//                 data,
+//                 JWT_SECRET_KEY,
+//                 { expiresIn: JWT_VALIDITY } // five day
+//             );
+//             res.status(200).send({
+//                 success: true,
+//                 message: `OTP verified successfully!`,
+//                 authToken: authToken
+//             });
+//         } else {
+//             res.status(400).send({
+//                 success: false,
+//                 message: 'Wrong OTP!'
+//             })
+//         }
+//     } catch (err) {
+//         res.status(500).send({
+//             success: false,
+//             message: err.message
+//         });
+//     }
+// }
 
 exports.getAppUserForAppUser = async (req, res) => {
     try {
